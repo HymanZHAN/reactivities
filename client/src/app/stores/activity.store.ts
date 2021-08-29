@@ -1,7 +1,6 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
 import { Activity } from "../models/activity";
-import { v4 as uuid } from "uuid";
 
 export default class ActivityStore {
   // activities: Activity[] = [];
@@ -22,12 +21,10 @@ export default class ActivityStore {
   }
 
   loadActivities = async () => {
+    this.setLoadingInitial(true);
     try {
       const response = await agent.Activities.list();
-      response.forEach((activity) => {
-        activity.date = activity.date.split("T")[0];
-        this.activityRegistry.set(activity.id, activity);
-      });
+      response.forEach((activity) => this.addActivityToRegistry(activity));
     } catch (error) {
       console.error(error);
     } finally {
@@ -35,30 +32,44 @@ export default class ActivityStore {
     }
   };
 
+  loadActivity = async (id: string) => {
+    let activity = this.getActivity(id);
+    if (activity) {
+      this.selectedActivity = activity;
+      return activity;
+    } else {
+      this.setLoadingInitial(true);
+      try {
+        activity = await agent.Activities.details(id);
+        this.addActivityToRegistry(activity);
+        runInAction(() => {
+          this.selectedActivity = activity;
+        });
+        return activity;
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.setLoadingInitial(false);
+      }
+    }
+  };
+
+  private getActivity = (id: string) => {
+    const result = this.activityRegistry.get(id);
+    return result;
+  };
+
+  private addActivityToRegistry = (activity: Activity) => {
+    activity.date = activity.date.split("T")[0];
+    this.activityRegistry.set(activity.id, activity);
+  };
+
   setLoadingInitial = (state: boolean): void => {
     this.isLoadingInitial = state;
   };
 
-  selectActivity = (id: string): void => {
-    this.selectedActivity = this.activityRegistry.get(id);
-  };
-
-  resetSelectedActivity = () => {
-    this.selectedActivity = undefined;
-  };
-
-  openForm = (id?: string) => {
-    id ? this.selectActivity(id) : this.resetSelectedActivity();
-    this.editMode = true;
-  };
-
-  closeForm = () => {
-    this.editMode = false;
-  };
-
   createActivity = async (activity: Activity) => {
     this.isLoading = true;
-    activity.id = uuid();
     try {
       await agent.Activities.create(activity);
       runInAction(() => {
@@ -98,9 +109,6 @@ export default class ActivityStore {
     try {
       await agent.Activities.delete(id);
       runInAction(() => {
-        if (this.selectedActivity?.id === id) {
-          this.resetSelectedActivity();
-        }
         this.activityRegistry.delete(id);
       });
     } catch (error) {
