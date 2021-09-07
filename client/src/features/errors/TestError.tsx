@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button, Header, Segment } from "semantic-ui-react";
 import axios from "axios";
 import ValidationErrors from "./ValidationErrors";
@@ -24,7 +24,7 @@ export default function TestErrors() {
       .catch((err) => console.log(err.response));
   }
 
-  function handleUnauthorised() {
+  function handleUnauthorized() {
     axios
       .get(baseUrl + "buggy/unauthorised")
       .catch((err) => console.log(err.response));
@@ -65,7 +65,7 @@ export default function TestErrors() {
             primary
           />
           <Button
-            onClick={handleUnauthorised}
+            onClick={handleUnauthorized}
             content="Unauthorised"
             basic
             primary

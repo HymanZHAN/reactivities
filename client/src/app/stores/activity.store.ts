@@ -1,6 +1,7 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
 import { Activity } from "../models/activity";
+import { format } from "date-fns";
 
 export default class ActivityStore {
   // activities: Activity[] = [];
@@ -8,7 +9,7 @@ export default class ActivityStore {
   selectedActivity: Activity | undefined = undefined;
   editMode = false;
   isLoading = false;
-  isLoadingInitial = true;
+  isLoadingInitial = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -16,14 +17,14 @@ export default class ActivityStore {
 
   get activitiesByDate() {
     return Array.from(this.activityRegistry.values()).sort(
-      (a: Activity, b: Activity) => Date.parse(a.date) - Date.parse(b.date)
+      (a: Activity, b: Activity) => a.date!.getTime() - b.date!.getTime()
     );
   }
 
   get groupedActivities() {
     return Object.entries(
       this.activitiesByDate.reduce((activities, activity) => {
-        const date = activity.date;
+        const date = format(activity.date!, "dd MMM yyyy");
         activities[date] = activities[date]
           ? [...activities[date], activity]
           : [activity];
@@ -72,7 +73,7 @@ export default class ActivityStore {
   };
 
   private addActivityToRegistry = (activity: Activity) => {
-    activity.date = activity.date.split("T")[0];
+    activity.date = new Date(activity.date!);
     this.activityRegistry.set(activity.id, activity);
   };
 
