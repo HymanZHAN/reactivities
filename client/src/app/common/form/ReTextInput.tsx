@@ -5,6 +5,7 @@ interface Props {
   placeholder: string;
   name: string;
   label?: string;
+  type?: "text" | "email" | "password";
 }
 
 export default function ReTextInput(props: Props) {
@@ -15,7 +16,7 @@ export default function ReTextInput(props: Props) {
       <label>{props.label}</label>
       <input {...field} {...props} />
       {meta.touched && meta.error ? (
-        <Label basic color="red">
+        <Label basic color="red" style={{ marginTop: "0.5em" }}>
           {meta.error}
         </Label>
       ) : null}

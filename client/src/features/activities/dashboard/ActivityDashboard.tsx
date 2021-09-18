@@ -17,7 +17,7 @@ export default observer(function ActivityDashboard() {
   }, [activityRegistry.size, loadActivities]);
 
   if (activityStore.isLoadingInitial) {
-    return <LoadingIndicator content="Loading app" />;
+    return <LoadingIndicator content="Loading activities..." />;
   }
 
   return (

@@ -23,7 +23,7 @@ export default function ReSelectInput(props: Props) {
         placeholder={props.placeholder}
       />
       {meta.touched && meta.error ? (
-        <Label basic color="red">
+        <Label basic color="red" style={{ marginTop: "0.5em" }}>
           {meta.error}
         </Label>
       ) : null}

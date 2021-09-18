@@ -16,7 +16,7 @@ export default function ReTextArea(props: Props) {
       <label>{props.label}</label>
       <textarea {...field} {...props} />
       {meta.touched && meta.error ? (
-        <Label basic color="red">
+        <Label basic color="red" style={{ marginTop: "0.5em" }}>
           {meta.error}
         </Label>
       ) : null}
