@@ -38,7 +38,8 @@ namespace Persistence
 
                 foreach (var user in users)
                 {
-                    await userManager.CreateAsync(user, "Pa$$w0rd");
+                    var result = await userManager.CreateAsync(user, "Pa$$w0rd");
+                    Console.WriteLine($"{result}");
                 }
 
                 var activities = new List<Activity>
