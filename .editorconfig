@@ -30,7 +30,7 @@ file_header_template = unset
 dotnet_analyzer_diagnostic.severity = none
 
 # Two or more consecutive blank lines: Remove down to one blank line. SA1507
-dotnet_diagnostic.SA1507.severity = warning
+dotnet_diagnostic.SA1507.severity =warning
 
 # Blank line immediately before or after a { line: remove it. SA1505, SA1509
 dotnet_diagnostic.SA1505.severity = warning

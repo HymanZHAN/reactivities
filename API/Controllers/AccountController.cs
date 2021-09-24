@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using API.DTOs;
@@ -74,7 +75,9 @@ namespace API.Controllers
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
             var email = User.FindFirstValue(ClaimTypes.Email);
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.Users
+                .Include(u => u.Photos)
+                .FirstOrDefaultAsync(u => u.Email == email);
 
             return CreateUserDto(user);
         }
@@ -84,7 +87,7 @@ namespace API.Controllers
             return new UserDto
             {
                 DisplayName = user.DisplayName,
-                Image = "",
+                Image = user?.Photos?.FirstOrDefault(x => x.IsMain)?.Url ?? "",
                 Token = _tokenService.CreateToken(user),
                 Username = user.UserName,
             };
