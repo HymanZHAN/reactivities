@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { history } from "../..";
 // import { toast } from "react-toastify";
 import { Activity, ActivityFormValues } from "../models/activity";
-import { Photo, Profile } from "../models/profile";
+import { Photo, Profile, ProfileAboutFormValues } from "../models/profile";
 import { User, UserFormValues } from "../models/user";
 import { store } from "../stores/store";
 
@@ -86,6 +86,7 @@ const Account = {
 
 const Profiles = {
   get: (username: string) => requests.get<Profile>(`/profiles/${username}`),
+  update: (profile: ProfileAboutFormValues) => requests.put(`/profiles`, profile),
   uploadPhoto: (file: Blob) => {
     const formData = new FormData();
     formData.append("File", file);

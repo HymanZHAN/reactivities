@@ -17,13 +17,10 @@ import { ActivityFormValues } from "../../../app/models/activity";
 export default observer(function ActivityForm() {
   const history = useHistory();
   const { activityStore } = useStore();
-  const { updateActivity, createActivity, loadActivity, isLoadingInitial } =
-    activityStore;
+  const { updateActivity, createActivity, loadActivity, isLoadingInitial } = activityStore;
 
   const { id } = useParams<{ id: string }>();
-  const [activity, setActivity] = useState<ActivityFormValues>(
-    new ActivityFormValues()
-  );
+  const [activity, setActivity] = useState<ActivityFormValues>(new ActivityFormValues());
 
   const validationSchema = Yup.object({
     title: Yup.string().required("The activity title is required."),
@@ -35,10 +32,7 @@ export default observer(function ActivityForm() {
   });
 
   useEffect(() => {
-    if (id)
-      loadActivity(id).then((activity) =>
-        setActivity(new ActivityFormValues(activity))
-      );
+    if (id) loadActivity(id).then((activity) => setActivity(new ActivityFormValues(activity)));
   }, [id, loadActivity]);
 
   function handleFormSubmit(activity: ActivityFormValues) {
@@ -47,13 +41,9 @@ export default observer(function ActivityForm() {
         ...activity,
         id: uuid(),
       };
-      createActivity(newActivity).then(() =>
-        history.push(`/activities/${newActivity.id}`)
-      );
+      createActivity(newActivity).then(() => history.push(`/activities/${newActivity.id}`));
     } else {
-      updateActivity(activity).then(() =>
-        history.push(`/activities/${activity.id}`)
-      );
+      updateActivity(activity).then(() => history.push(`/activities/${activity.id}`));
     }
   }
 
@@ -74,11 +64,7 @@ export default observer(function ActivityForm() {
           <Form className="ui form" onSubmit={handleSubmit} autoComplete="off">
             <ReTextInput name="title" placeholder="Title" />
             <ReTextArea name="description" rows={3} placeholder="Description" />
-            <ReSelectInput
-              options={categoryOptions}
-              name="category"
-              placeholder="Category"
-            />
+            <ReSelectInput options={categoryOptions} name="category" placeholder="Category" />
             <ReDateInput
               name="date"
               placeholderText="Date"

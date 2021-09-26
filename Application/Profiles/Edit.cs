@@ -2,31 +2,33 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Core;
 using Application.Interfaces;
-using Domain;
+using AutoMapper;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Application.Activities
+namespace Application.Profiles
 {
-    public class Create
+    public class Edit
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public Activity Activity { get; set; }
-
-            public Command(Activity activity)
+            public Command(string displayName, string bio = "")
             {
-                Activity = activity;
+                DisplayName = displayName;
+                Bio = bio;
             }
+
+            public string DisplayName { get; }
+            public string Bio { get; }
         }
 
         public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
             {
-                RuleFor(x => x.Activity).SetValidator(new ActivityValidator());
+                RuleFor(x => x.DisplayName).NotEmpty().WithMessage("Display name cannot be empty");
             }
         }
 
@@ -34,30 +36,26 @@ namespace Application.Activities
         {
             private readonly DataContext _context;
             private readonly IUserAccessor _userAccessor;
-            public Handler(DataContext context, IUserAccessor userAccessor)
+
+            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor)
             {
-                _userAccessor = userAccessor;
                 _context = context;
+                _userAccessor = userAccessor;
             }
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername());
+                var user = await _context.Users
+                    .SingleOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername());
 
-                var attendee = new ActivityAttendee
-                {
-                    AppUser = user,
-                    Activity = request.Activity,
-                    IsHost = true
-                };
-                request.Activity.Attendees.Add(attendee);
+                user.DisplayName = request.DisplayName ?? user.DisplayName;
+                user.Bio = request.Bio ?? user.Bio;
 
-                _context.Activities.Add(request.Activity);
+                _context.Entry(user).State = EntityState.Modified;
                 var result = await _context.SaveChangesAsync() > 0;
 
                 if (!result)
-                    return Result<Unit>.Failure("Failed to create activity");
-
+                    return Result<Unit>.Failure("Failed to update profile");
                 return Result<Unit>.Success(Unit.Value);
             }
         }

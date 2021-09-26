@@ -21,3 +21,15 @@ export interface Photo {
   url: string;
   isMain: boolean;
 }
+
+export class ProfileAboutFormValues {
+  displayName = "";
+  bio = "";
+
+  constructor(profile?: Profile) {
+    if (profile) {
+      this.displayName = profile.displayName;
+      this.bio = profile.bio || "";
+    }
+  }
+}
