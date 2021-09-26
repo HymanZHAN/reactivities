@@ -12,35 +12,21 @@ export default observer(function NavBar() {
     <Menu inverted fixed="top">
       <Container>
         <Menu.Item as={NavLink} exact to="/" header>
-          <img
-            src="/assets/logo.png"
-            alt="logo"
-            style={{ marginRight: "10px" }}
-          />
+          <img src="/assets/logo.png" alt="logo" style={{ marginRight: "10px" }} />
           Reactivities
         </Menu.Item>
         <Menu.Item as={NavLink} exact to="/activities" name="Activities" />
         <Menu.Item as={NavLink} exact to="/errors" name="errors" />
         <Menu.Item>
-          <Button
-            as={NavLink}
-            exact
-            to="/createActivity"
-            positive
-            content="Create Activity"
-          />
+          <Button as={NavLink} exact to="/createActivity" positive content="Create Activity" />
         </Menu.Item>
         <Menu.Item position="right">
-          <Image
-            src={user?.image || "/assets/user.png"}
-            avatar
-            spaced="right"
-          />
+          <Image src={user?.image || "/assets/user.png"} avatar spaced="right" />
           <Dropdown pointing="top left" text={user?.displayName}>
             <Dropdown.Menu>
               <Dropdown.Item
                 as={Link}
-                to={`/profile/${user?.username}`}
+                to={`/profiles/${user?.username}`}
                 text="My Profile"
                 icon="user"
               />

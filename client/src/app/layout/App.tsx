@@ -15,6 +15,7 @@ import { useStore } from "../stores/store";
 import { useEffect } from "react";
 import LoadingIndicator from "./LoadingIndicator";
 import ModalContainer from "../common/modals/ModalContainer";
+import ProfilePage from "../../features/activities/profiles/ProfilePage";
 
 function App() {
   const location = useLocation();
@@ -46,17 +47,14 @@ function App() {
             <Container style={{ marginTop: "7em" }}>
               <Switch>
                 <Route exact path="/activities" component={ActivityDashboard} />
-                <Route
-                  exact
-                  path="/activities/:id"
-                  component={ActivityDetails}
-                />
+                <Route exact path="/activities/:id" component={ActivityDetails} />
                 <Route
                   key={location.key}
                   exact
                   path={["/createActivity", "/manage/:id"]}
                   component={ActivityForm}
                 />
+                <Route exact path="/profiles/:username" component={ProfilePage} />
                 <Route exact path="/errors" component={TestErrors} />
                 <Route exact path="/server-error" component={ServerError} />
                 <Route exact path="/login" component={LoginForm} />
