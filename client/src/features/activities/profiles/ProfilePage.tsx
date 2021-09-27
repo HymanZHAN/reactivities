@@ -17,7 +17,7 @@ export default observer(function ProfilePage() {
   }, [loadProfile, username]);
 
   if (loadingProfile) {
-    return <LoadingIndicator content="..." />;
+    return <LoadingIndicator content="Loading profile..." />;
   }
   return (
     <Grid>

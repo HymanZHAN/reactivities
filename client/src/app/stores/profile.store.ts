@@ -40,9 +40,11 @@ export default class ProfileStore {
     this.loading = true;
     try {
       await agent.Profiles.update(profile);
-      runInAction(() => {
+      runInAction(async () => {
         this.profile = { ...this.profile, ...profile } as Profile;
         store.userStore.user!.displayName = this.profile.displayName;
+        store.userStore.user!.bio = this.profile.bio;
+        await store.activityStore.loadActivities();
       });
     } catch (error) {
       console.error(error);
