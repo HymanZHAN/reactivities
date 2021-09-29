@@ -15,12 +15,14 @@ export default observer(function ActivityDetails() {
     isLoadingInitial,
     selectedActivity: activity,
     loadActivity,
+    clearSelectedActivity,
   } = activityStore;
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
     if (id) loadActivity(id);
-  }, [id, loadActivity]);
+    return () => clearSelectedActivity();
+  }, [clearSelectedActivity, id, loadActivity]);
 
   if (isLoadingInitial || !activity) return <LoadingIndicator />;
 
@@ -29,7 +31,7 @@ export default observer(function ActivityDetails() {
       <Grid.Column width={10}>
         <ActivityDetailHeader activity={activity} />
         <ActivityDetailInfo activity={activity} />
-        <ActivityDetailChat />
+        <ActivityDetailChat activityId={activity.id} />
       </Grid.Column>
 
       <Grid.Column width={6}>
