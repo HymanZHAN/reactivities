@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Application.Activities;
+using Application.Core;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,9 +11,9 @@ namespace API.Controllers
     public class ActivitiesController : BaseApiController
     {
         [HttpGet]
-        public async Task<ActionResult> GetActivities()
+        public async Task<ActionResult> GetActivities([FromQuery] ActivityParams activityParams)
         {
-            return HandleResult(await Mediator.Send(new List.Query()));
+            return HandlePaginatedResult(await Mediator.Send(new List.Query { Params = activityParams }));
         }
 
         [HttpGet("{id}")]
@@ -28,7 +29,7 @@ namespace API.Controllers
             return Ok(await Mediator.Send(new Create.Command(activity)));
         }
 
-        [Authorize(Policy ="IsActivityHost")]
+        [Authorize(Policy = "IsActivityHost")]
         [HttpPut("{id}")]
         public async Task<IActionResult> EditActivity(Guid id, Activity activity)
         {
@@ -36,7 +37,7 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new Edit.Command(activity)));
         }
 
-        [Authorize(Policy ="IsActivityHost")]
+        [Authorize(Policy = "IsActivityHost")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteActivity(Guid id)
         {

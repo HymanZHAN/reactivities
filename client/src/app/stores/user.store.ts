@@ -48,6 +48,7 @@ export default class UserStore {
     localStorage.removeItem("jwt");
     this.user = null;
     history.push("/");
+    store.activityStore.clearActivities();
   };
 
   getUser = async () => {
