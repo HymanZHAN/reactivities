@@ -2,12 +2,12 @@ import { Formik, Form } from "formik";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { Header, Tab, Grid, Button } from "semantic-ui-react";
-import { Profile, ProfileAboutFormValues } from "../../../app/models/profile";
-import { useStore } from "../../../app/stores/store";
+import { Profile, ProfileAboutFormValues } from "../../app/models/profile";
+import { useStore } from "../../app/stores/store";
 import * as Yup from "yup";
 import { useParams } from "react-router";
-import ReTextInput from "../../../app/common/form/ReTextInput";
-import ReTextArea from "../../../app/common/form/ReTextArea";
+import ReTextInput from "../../app/common/form/ReTextInput";
+import ReTextArea from "../../app/common/form/ReTextArea";
 
 interface Props {
   profile: Profile;

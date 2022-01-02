@@ -32,6 +32,11 @@ namespace Application.Core
                     d => d.Following,
                     o => o.MapFrom(s => s.AppUser.Followers.Any(x => x.Observer.UserName == currentUsername))
                 );
+            CreateMap<Activity, Profiles.UserActivityDto>()
+            .ForMember(
+                d => d.HostUsername,
+                o => o.MapFrom(s => s.Attendees.FirstOrDefault(x => x.IsHost).AppUser.UserName ?? "")
+            );
             CreateMap<AppUser, Profiles.Profile>()
                 .ForMember(
                     d => d.Image,

@@ -15,7 +15,7 @@ import { useStore } from "../stores/store";
 import { useEffect } from "react";
 import LoadingIndicator from "./LoadingIndicator";
 import ModalContainer from "../common/modals/ModalContainer";
-import ProfilePage from "../../features/activities/profiles/ProfilePage";
+import ProfilePage from "../../features/profiles/ProfilePage";
 
 function App() {
   const location = useLocation();
