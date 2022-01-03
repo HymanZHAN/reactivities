@@ -16,5 +16,5 @@
     "**/bin": true,
     "**/obj": true
   },
-  "cSpell.words": ["Cloudinary", "Mediat"]
+  "cSpell.words": ["Cloudinary", "Mediat", "Npgsql"]
 }
